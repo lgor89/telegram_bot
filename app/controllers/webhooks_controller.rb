@@ -5,11 +5,10 @@ class WebhooksController < ApplicationController
   def callback
     @response = params[:message][:text]
     @chat_id = params[:message][:chat][:id]
-    @name = params[:message][:from][:first_name]).to_s)
-    if @response.casecmp('start').zero?
-      parameters = URI.encode_www_form("chat_id"=>@chat_id.to_s,"text"=>"hello #{@name}")
-      uri = URI(COMMON_REQUEST + 'sendMessage?'+"#{parameters}")
-      @res = Net::HTTP.post_form(uri, 'q' => '')
+    @name = params[:message][:from][:first_name].to_s
+    if @response.include?('start')
+      uri = URI(COMMON_REQUEST + 'sendMessage')
+      res = Net::HTTP.post_form(uri,"chat_id"=>@chat_id.to_s,"text"=>"hello #{@name}")
     end
   end
 end
